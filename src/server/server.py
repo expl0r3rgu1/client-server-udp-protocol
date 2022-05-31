@@ -29,6 +29,16 @@ def client_handler(server_socket, cmd, addr):
             file.close()
         else:
             server_socket.sendto("NOT OK".encode("utf-8"), addr)
+    elif cmd.startswith('put'):
+        filename = cmd.split()[1]
+        file = open("./files/" + filename, 'wb')
+        while True:
+            data, addr = server_socket.recvfrom(buffer_size)
+            if data.decode("utf-8") == "EOF":
+                break
+            file.write(data)
+
+        file.close()
 
 
 def start_server():
