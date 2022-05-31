@@ -37,11 +37,7 @@ def client_handler(server_socket, cmd, addr):
             if data.decode("utf-8") == "EOF":
                 break
             file.write(data)
-
         file.close()
-    elif cmd == "exit":
-        server_socket.close()
-        exit()
     else:
         server_socket.sendto("Unknown command".encode("utf-8"), addr)
 
@@ -57,6 +53,9 @@ def start_server():
         cmd = data.decode("utf-8")
         print("Received message from: " + str(addr))
         print("Message: " + cmd)
+        if cmd == "exit":
+            server_socket.close()
+            exit()
         thread = threading.Thread(target=client_handler, args=(server_socket, cmd, addr))
         thread.start()
         thread.join()
