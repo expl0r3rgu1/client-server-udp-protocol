@@ -14,6 +14,23 @@ def client_handler(server_socket, cmd, addr):
         server_socket.sendto(str(len(files)).encode("utf-8"), addr)
         for file in files:
             server_socket.sendto(file.encode("utf-8"), addr)
+    
+    elif cmd.startswith('get'):
+        filename = cmd.split()[1]
+        if os.path.exists('./files/' + filename):
+            server_socket.sendto("OK".encode("utf-8"), addr)
+            file = open("./files/" + filename, 'rb')
+            while True:
+                data = file.read(buffer_size)
+                if not data:
+                    print("end")
+                    server_socket.sendto("EOF".encode("utf-8"), addr)
+                    break
+                print(data)
+                server_socket.sendto(data, addr)
+            file.close()
+        else:
+            server_socket.sendto("NOT OK".encode("utf-8"), addr)
 
 
 def start_server():
