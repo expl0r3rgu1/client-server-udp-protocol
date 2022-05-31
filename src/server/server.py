@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import socket
-from _thread import *
+import threading
 import os
 
 host = "127.0.0.1"
@@ -23,10 +23,8 @@ def client_handler(server_socket, cmd, addr):
             while True:
                 data = file.read(buffer_size)
                 if not data:
-                    print("end")
                     server_socket.sendto("EOF".encode("utf-8"), addr)
                     break
-                print(data)
                 server_socket.sendto(data, addr)
             file.close()
         else:
@@ -44,6 +42,8 @@ def start_server():
         cmd = data.decode("utf-8")
         print("Received message from: " + str(addr))
         print("Message: " + cmd)
-        start_new_thread(client_handler, (server_socket, cmd, addr))
+        thread = threading.Thread(target=client_handler, args=(server_socket, cmd, addr))
+        thread.start()
+        thread.join()
 
 start_server()
