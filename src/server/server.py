@@ -15,8 +15,8 @@ def start_server():
 
     while True:
         data, addr = server_socket.recvfrom(buffer_size)
+        cmd = data.decode("utf-8")
         print("Received message from: " + str(addr))
-        print("Message: " + str(data))
-        
+        print("Message: " + cmd)
 
 start_server()
