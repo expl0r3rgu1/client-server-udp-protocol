@@ -39,6 +39,11 @@ def client_handler(server_socket, cmd, addr):
             file.write(data)
 
         file.close()
+    elif cmd == "exit":
+        server_socket.close()
+        exit()
+    else:
+        server_socket.sendto("Unknown command".encode("utf-8"), addr)
 
 
 def start_server():
