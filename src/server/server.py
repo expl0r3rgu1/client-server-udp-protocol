@@ -10,7 +10,8 @@ buffer_size = 1024
 
 def client_handler(server_socket, cmd, addr):
     if cmd == "list":
-        files = os.listdir('.')
+        files = os.listdir('./files')
+        server_socket.sendto(str(len(files)).encode("utf-8"), addr)
         for file in files:
             server_socket.sendto(file.encode("utf-8"), addr)
 
@@ -26,5 +27,6 @@ def start_server():
         cmd = data.decode("utf-8")
         print("Received message from: " + str(addr))
         print("Message: " + cmd)
+        start_new_thread(client_handler, (server_socket, cmd, addr))
 
 start_server()
