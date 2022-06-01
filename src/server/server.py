@@ -8,10 +8,11 @@ HOST = "127.0.0.1"
 PORT = 10000
 BUFFER_SIZE = 1024
 EOF = b' /EOF/ \r\n/'
+FILES_PATH = './files'
 
 def client_handler(server_socket, cmd, addr):
     if cmd == "list":
-        files = os.listdir('./files')
+        files = os.listdir(FILES_PATH)
         server_socket.sendto(str(len(files)).encode("utf-8"), addr)
         for file in files:
             server_socket.sendto(file.encode("utf-8"), addr)
@@ -19,10 +20,10 @@ def client_handler(server_socket, cmd, addr):
     
     elif cmd.startswith('get'):
         filename = cmd.split()[1]
-        if os.path.exists('./files/' + filename):
+        if os.path.exists(FILES_PATH + '/' + filename):
             print("Sending file: " + filename)
             server_socket.sendto("OK".encode("utf-8"), addr)
-            file = open("./files/" + filename, 'rb')
+            file = open(FILES_PATH + '/' + filename, 'rb')
             while True:
                 data = file.read(BUFFER_SIZE)
                 if not data:
@@ -36,7 +37,7 @@ def client_handler(server_socket, cmd, addr):
     elif cmd.startswith('put'):
         filename = cmd.split()[1]
         print("Receiving file: " + filename)
-        file = open("./files/" + filename, 'wb')
+        file = open(FILES_PATH + '/' + filename, 'wb')
         while True:
             data, addr = server_socket.recvfrom(BUFFER_SIZE)
             if data == EOF:
