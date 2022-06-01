@@ -13,7 +13,7 @@ while True:
     print("")
 
     if cmd == "list":
-        list_files(SERVER_SOCKET, SERVER_ADDRESS)
+        list_files(SERVER_SOCKET, SERVER_ADDRESS, cmd)
     elif cmd.startswith('get'):
         get_file(SERVER_SOCKET, SERVER_ADDRESS, cmd)
     elif cmd.startswith('put'):

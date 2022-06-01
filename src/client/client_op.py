@@ -4,7 +4,7 @@ FILES_PATH = './files'
 EOF = b' /EOF/ \r\n/'
 BUFFER_SIZE = 1024
 
-def list_files(server_socket, server_address):
+def list_files(server_socket, server_address, cmd):
     server_socket.sendto(cmd.encode(), server_address)
     data, addr = server_socket.recvfrom(buffer_size)
     files_num = int(data.decode("utf-8"))
