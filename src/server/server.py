@@ -14,10 +14,12 @@ def client_handler(server_socket, cmd, addr):
         server_socket.sendto(str(len(files)).encode("utf-8"), addr)
         for file in files:
             server_socket.sendto(file.encode("utf-8"), addr)
+        print("List of files sent")
     
     elif cmd.startswith('get'):
         filename = cmd.split()[1]
         if os.path.exists('./files/' + filename):
+            print("Sending file: " + filename)
             server_socket.sendto("OK".encode("utf-8"), addr)
             file = open("./files/" + filename, 'rb')
             while True:
@@ -27,17 +29,24 @@ def client_handler(server_socket, cmd, addr):
                     break
                 server_socket.sendto(data, addr)
             file.close()
+            print("File " + filename + " sent")
         else:
             server_socket.sendto("NOT OK".encode("utf-8"), addr)
     elif cmd.startswith('put'):
+        print("Receiving file: " + filename)
         filename = cmd.split()[1]
         file = open("./files/" + filename, 'wb')
         while True:
             data, addr = server_socket.recvfrom(buffer_size)
-            if data.decode("utf-8") == "EOF":
-                break
+            try:
+                if data.decode("utf-8") == "EOF":
+                    break
+            except:
+                if data == "EOF":
+                    break
             file.write(data)
         file.close()
+        print("File " + filename + " received")
     else:
         server_socket.sendto("Unknown command".encode("utf-8"), addr)
 
