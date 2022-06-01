@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+import socket
+import os
+
 FILES_PATH = './files'
 EOF = b' /EOF/ \r\n/'
 BUFFER_SIZE = 1024
