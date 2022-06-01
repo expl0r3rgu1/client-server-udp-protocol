@@ -23,3 +23,14 @@ def send_file(server_socket, filename, addr):
         print("File " + filename + " sent")
     else:
         server_socket.sendto("NOT OK".encode("utf-8"), addr)
+
+def update_file(server_socket, filename, addr):
+    print("Receiving file: " + filename)
+    file = open(FILES_PATH + '/' + filename, 'wb')
+    while True:
+        data, addr = server_socket.recvfrom(BUFFER_SIZE)
+        if data == EOF:
+            break
+        file.write(data)
+    file.close()
+    print("File " + filename + " received")
