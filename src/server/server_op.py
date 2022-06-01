@@ -1,5 +1,6 @@
 # server operations
 FILES_PATH = './files'
+EOF = b' /EOF/ \r\n/'
 
 def list_files(server_socket, addr):
     files = os.listdir(FILES_PATH)
