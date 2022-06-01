@@ -2,6 +2,7 @@
 
 import socket
 import os
+from client_op import *
 
 SERVER_ADDRESS = ('127.0.0.1', 10000)
 BUFFER_SIZE = 1024
