@@ -34,3 +34,21 @@ def get_file(server_socket, addr, cmd):
         print("File " + filename + " received")
     else:
         print("File not found")
+
+def upload_file(server_socket, addr, cmd):
+    server_socket.sendto(cmd.encode(), server_address)
+    filename = cmd.split()[1]
+    if os.path.exists(FILES_PATH + filename):
+        print("Uploading file: " + filename)
+        server_socket.sendto(cmd.encode(), server_address)
+        file = open(FILES_PATH + filename, 'rb')
+        while True:
+            data = file.read(buffer_size)
+            if not data:
+                server_socket.sendto(eof, server_address)
+                break
+            server_socket.sendto(data, server_address)
+        file.close()
+        print("File " + filename + " uploaded")
+    else:
+        print("File not found")
