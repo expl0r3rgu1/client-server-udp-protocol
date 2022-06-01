@@ -8,8 +8,6 @@ from server_op import *
 HOST = "127.0.0.1"
 PORT = 10000
 BUFFER_SIZE = 1024
-EOF = b' /EOF/ \r\n/'
-FILES_PATH = './files'
 
 def client_handler(server_socket, cmd, addr):
     if cmd == "list":
