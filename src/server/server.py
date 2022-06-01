@@ -4,10 +4,10 @@ import socket
 import threading
 import os
 
-host = "127.0.0.1"
-port = 10000
-buffer_size = 1024
-eof = b' /EOF/ \r\n/'
+HOST = "127.0.0.1"
+PORT = 10000
+BUFFER_SIZE = 1024
+EOF = b' /EOF/ \r\n/'
 
 def client_handler(server_socket, cmd, addr):
     if cmd == "list":
@@ -24,9 +24,9 @@ def client_handler(server_socket, cmd, addr):
             server_socket.sendto("OK".encode("utf-8"), addr)
             file = open("./files/" + filename, 'rb')
             while True:
-                data = file.read(buffer_size)
+                data = file.read(BUFFER_SIZE)
                 if not data:
-                    server_socket.sendto(eof, addr)
+                    server_socket.sendto(EOF, addr)
                     break
                 server_socket.sendto(data, addr)
             file.close()
@@ -38,8 +38,8 @@ def client_handler(server_socket, cmd, addr):
         print("Receiving file: " + filename)
         file = open("./files/" + filename, 'wb')
         while True:
-            data, addr = server_socket.recvfrom(buffer_size)
-            if data == eof:
+            data, addr = server_socket.recvfrom(BUFFER_SIZE)
+            if data == EOF:
                 break
             file.write(data)
         file.close()
@@ -50,12 +50,12 @@ def client_handler(server_socket, cmd, addr):
 
 def start_server():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_socket.bind((host, port))
+    server_socket.bind((HOST, PORT))
 
-    print("Server started and listening on port: " + str(port))
+    print("Server started and listening on port: " + str(PORT))
 
     while True:
-        data, addr = server_socket.recvfrom(buffer_size)
+        data, addr = server_socket.recvfrom(BUFFER_SIZE)
         cmd = data.decode("utf-8")
         print("Received message from: " + str(addr))
         print("Message: " + cmd)
