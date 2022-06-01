@@ -7,6 +7,7 @@ import os
 host = "127.0.0.1"
 port = 10000
 buffer_size = 1024
+eof = b' /EOF/ \r\n/'
 
 def client_handler(server_socket, cmd, addr):
     if cmd == "list":
@@ -25,7 +26,7 @@ def client_handler(server_socket, cmd, addr):
             while True:
                 data = file.read(buffer_size)
                 if not data:
-                    server_socket.sendto("EOF".encode("utf-8"), addr)
+                    server_socket.sendto(eof, addr)
                     break
                 server_socket.sendto(data, addr)
             file.close()
@@ -33,17 +34,13 @@ def client_handler(server_socket, cmd, addr):
         else:
             server_socket.sendto("NOT OK".encode("utf-8"), addr)
     elif cmd.startswith('put'):
-        print("Receiving file: " + filename)
         filename = cmd.split()[1]
+        print("Receiving file: " + filename)
         file = open("./files/" + filename, 'wb')
         while True:
             data, addr = server_socket.recvfrom(buffer_size)
-            try:
-                if data.decode("utf-8") == "EOF":
-                    break
-            except:
-                if data == "EOF":
-                    break
+            if data == eof:
+                break
             file.write(data)
         file.close()
         print("File " + filename + " received")
