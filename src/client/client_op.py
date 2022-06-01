@@ -4,7 +4,7 @@ FILES_PATH = './files'
 EOF = b' /EOF/ \r\n/'
 BUFFER_SIZE = 1024
 
-def list_files(server_socket, addr):
+def list_files(server_socket, server_address):
     server_socket.sendto(cmd.encode(), server_address)
     data, addr = server_socket.recvfrom(buffer_size)
     files_num = int(data.decode("utf-8"))
@@ -14,7 +14,7 @@ def list_files(server_socket, addr):
         data, addr = server_socket.recvfrom(buffer_size)
         print(data.decode("utf-8"))
 
-def get_file(server_socket, addr, cmd):
+def get_file(server_socket, server_address, cmd):
     server_socket.sendto(cmd.encode(), server_address)
     filename = cmd.split()[1]
     data, addr = server_socket.recvfrom(buffer_size)
@@ -35,7 +35,7 @@ def get_file(server_socket, addr, cmd):
     else:
         print("File not found")
 
-def upload_file(server_socket, addr, cmd):
+def upload_file(server_socket, server_address, cmd):
     server_socket.sendto(cmd.encode(), server_address)
     filename = cmd.split()[1]
     if os.path.exists(FILES_PATH + filename):

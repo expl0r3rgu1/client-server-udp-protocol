@@ -13,14 +13,14 @@ while True:
     print("")
 
     if cmd == "list":
-        list_files(server_socket, addr)
+        list_files(SERVER_SOCKET, SERVER_ADDRESS)
     elif cmd.startswith('get'):
-        get_file(server_socket, addr, cmd)
+        get_file(SERVER_SOCKET, SERVER_ADDRESS, cmd)
     elif cmd.startswith('put'):
-        upload_file(server_socket, addr, cmd)
+        upload_file(SERVER_SOCKET, SERVER_ADDRESS, cmd)
     elif cmd == "exit":
-        server_socket.sendto(cmd.encode(), server_address)
-        server_socket.close()
+        SERVER_SOCKET.sendto(cmd.encode(), SERVER_ADDRESS)
+        SERVER_SOCKET.close()
         exit()
     else:
         print("Unknown command")
