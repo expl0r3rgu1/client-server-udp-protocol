@@ -13,3 +13,24 @@ def list_files(server_socket, addr):
     for file in range(files_num):
         data, addr = server_socket.recvfrom(buffer_size)
         print(data.decode("utf-8"))
+
+def get_file(server_socket, addr, cmd):
+    server_socket.sendto(cmd.encode(), server_address)
+    filename = cmd.split()[1]
+    data, addr = server_socket.recvfrom(buffer_size)
+
+    if data.decode("utf-8") == "OK":
+        print("Downloading file: " + filename)
+        if not os.path.isdir(FILES_PATH):
+            os.mkdir(FILES_PATH)
+        file = open(FILES_PATH + filename, 'wb')
+        while True:
+            data, addr = server_socket.recvfrom(buffer_size)
+            if data == EOF:
+                break
+            file.write(data)
+
+        file.close()
+        print("File " + filename + " received")
+    else:
+        print("File not found")
