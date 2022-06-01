@@ -48,7 +48,7 @@ def upload_file(server_socket, server_address, cmd):
         while True:
             data = file.read(BUFFER_SIZE)
             if not data:
-                server_socket.sendto(eof, server_address)
+                server_socket.sendto(EOF, server_address)
                 break
             server_socket.sendto(data, server_address)
         file.close()
