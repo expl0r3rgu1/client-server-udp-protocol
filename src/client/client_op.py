@@ -26,7 +26,7 @@ def get_file(server_socket, server_address, cmd):
         print("Downloading file: " + filename)
         if not os.path.isdir(FILES_PATH):
             os.mkdir(FILES_PATH)
-        file = open(FILES_PATH + filename, 'wb')
+        file = open(FILES_PATH + '/' + filename, 'wb')
         while True:
             data, addr = server_socket.recvfrom(BUFFER_SIZE)
             if data == EOF:
@@ -41,10 +41,10 @@ def get_file(server_socket, server_address, cmd):
 def upload_file(server_socket, server_address, cmd):
     server_socket.sendto(cmd.encode(), server_address)
     filename = cmd.split()[1]
-    if os.path.exists(FILES_PATH + filename):
+    if os.path.exists(FILES_PATH + '/' + filename):
         print("Uploading file: " + filename)
         server_socket.sendto(cmd.encode(), server_address)
-        file = open(FILES_PATH + filename, 'rb')
+        file = open(FILES_PATH + '/' + filename, 'rb')
         while True:
             data = file.read(BUFFER_SIZE)
             if not data:
