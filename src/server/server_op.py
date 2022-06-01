@@ -8,6 +8,8 @@ EOF = b' /EOF/ \r\n/'
 BUFFER_SIZE = 1024
 
 def list_files(server_socket, addr):
+    if not os.path.isdir(FILES_PATH):
+        os.mkdir(FILES_PATH)
     files = os.listdir(FILES_PATH)
     server_socket.sendto(str(len(files)).encode("utf-8"), addr)
     for file in files:
@@ -32,6 +34,8 @@ def send_file(server_socket, filename, addr):
 
 def update_file(server_socket, filename, addr):
     print("\nReceiving file: " + filename)
+    if not os.path.isdir(FILES_PATH):
+            os.mkdir(FILES_PATH)
     file = open(FILES_PATH + '/' + filename, 'wb')
     while True:
         data, addr = server_socket.recvfrom(BUFFER_SIZE)
