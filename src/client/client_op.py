@@ -39,7 +39,6 @@ def get_file(server_socket, server_address, cmd):
         print("File not found")
 
 def upload_file(server_socket, server_address, cmd):
-    server_socket.sendto(cmd.encode(), server_address)
     filename = cmd.split()[1]
     if os.path.exists(FILES_PATH + '/' + filename):
         print("Uploading file: " + filename)
